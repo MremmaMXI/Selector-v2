@@ -296,31 +296,74 @@
       color: #a5b4fc;
     }
 
-    /* ===== REDUCE MOTION BUTTON ===== */
-    .reduce-motion-btn {
-      background: transparent;
-      width: 28px;
-      height: 28px;
-      overflow: visible;
+    /* ===== BOTÓN REDUCIR ANIMACIONES ===== */
+    .btn-reduce-motion {
+      background: transparent !important;
+      border: none !important;
+      box-shadow:
+        0 10px 20px -4px rgba(0,0,0,0.4),
+        inset 0 -3px 4px -1px rgba(0,0,0,0.15),
+        0 -6px 10px -1px rgba(255,255,255,0.7),
+        inset 0 3px 4px -1px rgba(255,255,255,0.25),
+        inset 0 0 5px 1px rgba(255,255,255,0.7),
+        inset 0 12px 20px 0 rgba(255,255,255,0.2);
     }
 
-    .reduce-motion-btn.active {
-      background: rgba(99,102,241,0.12);
+    body.dark .btn-reduce-motion {
+      background: transparent !important;
+      box-shadow:
+        0 10px 20px -4px rgba(0,0,0,0.65),
+        inset 0 -3px 4px -1px rgba(0,0,0,0.35),
+        0 -6px 10px -1px rgba(80,80,110,0.25),
+        inset 0 3px 4px -1px rgba(80,80,110,0.2),
+        inset 0 0 5px 1px rgba(80,80,110,0.25),
+        inset 0 12px 20px 0 rgba(80,80,110,0.1);
     }
 
-    body.dark .reduce-motion-btn {
-      background: transparent;
+    /* Punto central: oculto por defecto */
+    .btn-reduce-motion .rm-dot {
+      opacity: 0;
+      transition: opacity 220ms cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
-    body.dark .reduce-motion-btn.active {
-      background: rgba(165,180,252,0.15);
+    /* Punto central: visible cuando activo */
+    .btn-reduce-motion.active .rm-dot {
+      opacity: 1;
+    }
+
+    /* Estado activo: color igual que layout-btn.active */
+    .btn-reduce-motion.active {
+      color: #6366f1;
+    }
+
+    body.dark .btn-reduce-motion.active {
+      color: #a5b4fc;
+    }
+
+    /* Estado activo: box-shadow hundido como los otros layout-btn.active */
+    .btn-reduce-motion.active {
+      box-shadow:
+        0 6px 14px -4px rgba(0,0,0,0.35),
+        inset 0 -6px 20px 1px rgba(255,255,255,0.8),
+        0 -6px 10px -1px rgba(255,255,255,0.6),
+        inset 0 6px 18px 0 rgba(0,0,0,0.25),
+        inset 0 0 8px 1px rgba(255,255,255,0.5);
+    }
+
+    body.dark .btn-reduce-motion.active {
+      box-shadow:
+        0 6px 14px -4px rgba(0,0,0,0.6),
+        inset 0 -6px 20px 1px rgba(80,80,110,0.4),
+        0 -6px 10px -1px rgba(80,80,110,0.2),
+        inset 0 6px 18px 0 rgba(0,0,0,0.45),
+        inset 0 0 8px 1px rgba(80,80,110,0.3);
     }
 
     /* ===== REDUCE MOTION MODE ===== */
 
-    /* 1 & 2. Ken Burns y fade entre fotos del fondo: pausar animación y cross-fade instantáneo */
+    /* 1 & 2. Ken Burns y fade entre fotos del fondo: eliminar animación y cross-fade */
     body.reduce-motion .bg-slide {
-      animation-play-state: paused !important;
+      animation: none !important;
       transition: none !important;
     }
 
@@ -350,6 +393,8 @@
     /* 5. Animaciones del modal (popIn, scale, opacity al abrir/cerrar) */
     body.reduce-motion .modal {
       transition: none !important;
+      transform: scale(1) !important;
+      opacity: 1 !important;
     }
     body.reduce-motion .modal .menu-image,
     body.reduce-motion .modal .card .menu-image {
@@ -1666,7 +1711,7 @@ button:focus, .gallery-item:focus, .sort-btn:focus, .menu-btn:focus { outline: 3
 
     button:focus, .gallery-item:focus, .sort-btn:focus, .menu-btn:focus { outline: 3px solid rgba(100,100,255,0.14); outline-offset:2px; }
 
-/* Mode transition fade */
+/* Mode transition fade — instantáneo siempre */
 .header,
 .message-generator,
 .filter-group-card,
@@ -1677,8 +1722,15 @@ button:focus, .gallery-item:focus, .sort-btn:focus, .menu-btn:focus { outline: 3
 #toggleMsgGen,
 .mode-toggle {
   transition-property: background, background-color, border-color, box-shadow, color, filter, opacity;
-  transition-duration: 0.06s;
+  transition-duration: 0ms;
   transition-timing-function: ease;
+}
+
+.panel,
+.filter-btn,
+.type-toggle,
+.hotel-btn {
+  transition-duration: 0ms;
 }
 
 #brandLogo {
@@ -2165,9 +2217,8 @@ body.dark #toggleMsgGen:active {
   right: calc(100% + 10px);
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(255,255,255,0.96);
+  background: rgba(255, 255, 255, 0.97);
   color: #111111;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.18), 0 0 0 1px rgba(0,0,0,0.07);
   font-size: 12px;
   padding: 5px 10px;
   border-radius: 7px;
@@ -2176,12 +2227,13 @@ body.dark #toggleMsgGen:active {
   pointer-events: none;
   white-space: nowrap;
   z-index: 9999;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.14), 0 0 0 1px rgba(0,0,0,0.07);
 }
 
 body.dark .toggle-tooltip {
   background: rgba(20,20,30,0.92);
   color: #fff;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.28);
+  box-shadow: none;
 }
 
 #toggleMsgGen:hover .toggle-tooltip {
@@ -2288,7 +2340,7 @@ body.dark #grp-place.expanded > .group-header {
   position: fixed;
   transform: translateX(-50%) scale(0.88);
   transform-origin: center bottom;
-  background: rgba(255,255,255,0.96);
+  background: rgba(255, 255, 255, 0.97);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   color: #111111;
@@ -2301,13 +2353,13 @@ body.dark #grp-place.expanded > .group-header {
   z-index: 9999;
   opacity: 0;
   transition: opacity 0.18s ease, transform 0.18s cubic-bezier(0.34,1.56,0.64,1);
-  box-shadow: 0 4px 14px rgba(0,0,0,0.18), 0 0 0 1px rgba(0,0,0,0.07);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.14), 0 0 0 1px rgba(0,0,0,0.07);
   letter-spacing: 0.01em;
 }
 
 body.dark .ui-tooltip {
-  background: rgba(20,20,30,0.92);
-  color: #fff;
+  background: rgba(20, 20, 30, 0.92);
+  color: #ffffff;
   box-shadow: 0 4px 14px rgba(0,0,0,0.28);
 }
 
@@ -2881,8 +2933,14 @@ body.dark .filter-group-card {
       <button type="button" id="btnLayoutPopout" class="layout-btn" title="Ventana flotante" aria-label="Ventana flotante" aria-pressed="false">
         <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M19 19H5V5h7V3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>
       </button>
-      <button type="button" id="btnReduceMotion" class="layout-btn reduce-motion-btn" title="Reducir animaciones" aria-label="Reducir animaciones" aria-pressed="false">
-        <svg aria-hidden="true" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/><line x1="2" y1="2" x2="22" y2="22" stroke-width="2.5"/></svg>
+      <button type="button" id="btnReduceMotion" class="layout-btn btn-reduce-motion" title="Reducir animaciones" aria-label="Reducir animaciones" aria-pressed="false">
+        <!-- Anillo externo siempre visible, punto central solo cuando está activo -->
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Anillo exterior (siempre visible) -->
+          <circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="2" fill="none"/>
+          <!-- Punto central (visible solo cuando .active via CSS) -->
+          <circle cx="12" cy="12" r="4" class="rm-dot" fill="currentColor"/>
+        </svg>
       </button>
       <button type="button" id="btnZoomIn" class="layout-btn" title="Acercar zoom" aria-label="Acercar zoom">+</button>
       <span id="zoomValue" class="zoom-value" aria-live="polite" aria-label="Nivel de zoom">100%</span>
