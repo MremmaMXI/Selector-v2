@@ -316,14 +316,48 @@
       background: rgba(165,180,252,0.15);
     }
 
-    /* ===== REDUCE MOTION GLOBAL ===== */
-    body.reduce-motion *,
-    body.reduce-motion *::before,
-    body.reduce-motion *::after {
-      animation-duration: 0.001ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.001ms !important;
-      scroll-behavior: auto !important;
+    /* ===== REDUCE MOTION MODE ===== */
+
+    /* 1 & 2. Ken Burns y fade entre fotos del fondo: pausar animación y cross-fade instantáneo */
+    body.reduce-motion .bg-slide {
+      animation-play-state: paused !important;
+      transition: none !important;
+    }
+
+    /* 3. Logo estrella: pausar su animación de rotación/transición */
+    body.reduce-motion #brandLogo {
+      animation: none !important;
+      transition: none !important;
+    }
+
+    /* 4. Transición modo oscuro/claro: instantánea en todos los elementos afectados */
+    body.reduce-motion .header,
+    body.reduce-motion .message-generator,
+    body.reduce-motion .filter-group-card,
+    body.reduce-motion .group,
+    body.reduce-motion .sort-btn,
+    body.reduce-motion .layout-btn,
+    body.reduce-motion .zoom-value,
+    body.reduce-motion #toggleMsgGen,
+    body.reduce-motion .mode-toggle,
+    body.reduce-motion .panel,
+    body.reduce-motion .filter-btn,
+    body.reduce-motion .type-toggle,
+    body.reduce-motion .hotel-btn {
+      transition-duration: 0ms !important;
+    }
+
+    /* 5. Animaciones del modal (popIn, scale, opacity al abrir/cerrar) */
+    body.reduce-motion .modal {
+      transition: none !important;
+    }
+    body.reduce-motion .modal .menu-image,
+    body.reduce-motion .modal .card .menu-image {
+      animation: none !important;
+      transition: none !important;
+    }
+    body.reduce-motion .overlay {
+      transition: none !important;
     }
 
     .zoom-value {
@@ -3360,18 +3394,19 @@ body.dark .filter-group-card {
         });
       });
 
-      // Botón Pantalla mínima — abre ventana flotante 1154×776
+      // Botón Ventana flotante — aplica/quita body.layout-popout localmente
       const btnPopout = document.getElementById('btnLayoutPopout');
       if (btnPopout) {
         btnPopout.addEventListener('click', function() {
-          const w = 1154, h = 776;
-          const left = Math.round((screen.width - w) / 2);
-          const top = Math.round((screen.height - h) / 2);
-          window.open(window.location.href, '_blank',
-            'width=' + w + ',height=' + h + ',left=' + left + ',top=' + top +
-            ',resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,status=no'
-          );
-          window.close();
+          const isActive = document.body.classList.toggle('layout-popout');
+          btnPopout.classList.toggle('active', isActive);
+          btnPopout.setAttribute('aria-pressed', String(isActive));
+          // Si se activa popout, desactivar full
+          if (isActive) {
+            document.body.classList.remove('layout-full');
+            btnFull.classList.remove('active');
+            btnFull.setAttribute('aria-pressed', 'false');
+          }
         });
       }
 
