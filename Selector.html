@@ -296,101 +296,64 @@
       color: #a5b4fc;
     }
 
-    /* ===== BOTÓN REDUCIR ANIMACIONES ===== */
-    .btn-reduce-motion {
-      background: transparent !important;
-      border: none !important;
-      box-shadow:
-        0 10px 20px -4px rgba(0,0,0,0.4),
-        inset 0 -3px 4px -1px rgba(0,0,0,0.15),
-        0 -6px 10px -1px rgba(255,255,255,0.7),
-        inset 0 3px 4px -1px rgba(255,255,255,0.25),
-        inset 0 0 5px 1px rgba(255,255,255,0.7),
-        inset 0 12px 20px 0 rgba(255,255,255,0.2);
+    /* ===== BOTÓN REDUCIR EFECTOS — anillo sin spotlight ===== */
+
+    /* Eliminar el spotlight radial del botón cuando está vacío (inactivo) */
+    #btnReduceMotion::before {
+      display: none !important;
+      opacity: 0 !important;
     }
 
-    body.dark .btn-reduce-motion {
-      background: transparent !important;
-      box-shadow:
-        0 10px 20px -4px rgba(0,0,0,0.65),
-        inset 0 -3px 4px -1px rgba(0,0,0,0.35),
-        0 -6px 10px -1px rgba(80,80,110,0.25),
-        inset 0 3px 4px -1px rgba(80,80,110,0.2),
-        inset 0 0 5px 1px rgba(80,80,110,0.25),
-        inset 0 12px 20px 0 rgba(80,80,110,0.1);
-    }
-
-    /* Punto central: oculto por defecto */
-    .btn-reduce-motion .rm-dot {
+    /* Punto central: oculto por defecto (anillo vacío) */
+    #btnReduceMotion .rm-dot {
       opacity: 0;
-      transition: opacity 220ms cubic-bezier(0.34, 1.56, 0.64, 1);
+      transform-origin: center;
+      transform: scale(0);
+      transition: opacity 220ms cubic-bezier(0.34,1.56,0.64,1),
+                  transform 220ms cubic-bezier(0.34,1.56,0.64,1);
     }
 
-    /* Punto central: visible cuando activo */
-    .btn-reduce-motion.active .rm-dot {
+    /* Punto central: visible y escalado cuando activo (anillo relleno) */
+    #btnReduceMotion.active .rm-dot {
       opacity: 1;
+      transform: scale(1);
     }
 
-    /* Estado activo: color igual que layout-btn.active */
-    .btn-reduce-motion.active {
+    /* Color modo claro inactivo */
+    #btnReduceMotion {
+      color: #333;
+    }
+
+    /* Color modo claro activo */
+    #btnReduceMotion.active {
       color: #6366f1;
     }
 
-    body.dark .btn-reduce-motion.active {
+    /* Color modo oscuro inactivo */
+    body.dark #btnReduceMotion {
+      color: #e0e0ff;
+    }
+
+    /* Color modo oscuro activo */
+    body.dark #btnReduceMotion.active {
       color: #a5b4fc;
     }
 
-    /* Estado activo: box-shadow hundido como los otros layout-btn.active */
-    .btn-reduce-motion.active {
-      box-shadow:
-        0 6px 14px -4px rgba(0,0,0,0.35),
-        inset 0 -6px 20px 1px rgba(255,255,255,0.8),
-        0 -6px 10px -1px rgba(255,255,255,0.6),
-        inset 0 6px 18px 0 rgba(0,0,0,0.25),
-        inset 0 0 8px 1px rgba(255,255,255,0.5);
-    }
+    /* ===== REDUCE MOTION — elimina animaciones específicas ===== */
 
-    body.dark .btn-reduce-motion.active {
-      box-shadow:
-        0 6px 14px -4px rgba(0,0,0,0.6),
-        inset 0 -6px 20px 1px rgba(80,80,110,0.4),
-        0 -6px 10px -1px rgba(80,80,110,0.2),
-        inset 0 6px 18px 0 rgba(0,0,0,0.45),
-        inset 0 0 8px 1px rgba(80,80,110,0.3);
-    }
-
-    /* ===== REDUCE MOTION MODE ===== */
-
-    /* 1 & 2. Ken Burns y fade entre fotos del fondo: eliminar animación y cross-fade */
+    /* Ken Burns del fondo: eliminar */
     body.reduce-motion .bg-slide {
       animation: none !important;
-      transition: none !important;
+      transition: opacity 0ms !important;
     }
 
-    /* 3. Logo estrella: pausar su animación de rotación/transición */
+    /* Logo estrella: eliminar transición/animación */
     body.reduce-motion #brandLogo {
       animation: none !important;
       transition: none !important;
     }
 
-    /* 4. Transición modo oscuro/claro: instantánea en todos los elementos afectados */
-    body.reduce-motion .header,
-    body.reduce-motion .message-generator,
-    body.reduce-motion .filter-group-card,
-    body.reduce-motion .group,
-    body.reduce-motion .sort-btn,
-    body.reduce-motion .layout-btn,
-    body.reduce-motion .zoom-value,
-    body.reduce-motion #toggleMsgGen,
-    body.reduce-motion .mode-toggle,
-    body.reduce-motion .panel,
-    body.reduce-motion .filter-btn,
-    body.reduce-motion .type-toggle,
-    body.reduce-motion .hotel-btn {
-      transition-duration: 0ms !important;
-    }
-
-    /* 5. Animaciones del modal (popIn, scale, opacity al abrir/cerrar) */
+    /* Modal: eliminar animación de entrada popIn y transición de escala */
     body.reduce-motion .modal {
       transition: none !important;
       transform: scale(1) !important;
@@ -402,6 +365,11 @@
       transition: none !important;
     }
     body.reduce-motion .overlay {
+      transition: none !important;
+    }
+
+    /* Panel blur/transform al abrir modal */
+    body.reduce-motion .panel {
       transition: none !important;
     }
 
@@ -462,29 +430,6 @@
     }
 
     body.layout-full .message-generator {
-      max-height: none;
-    }
-
-    /* ===== POPOUT / APPS SCRIPT WINDOW MODE ===== */
-    body.layout-popout .wrap {
-      padding: 8px;
-      align-items: stretch;
-    }
-
-    body.layout-popout .panel {
-      width: min(1130px, 98vw);
-      max-width: 98vw;
-      height: calc(100vh - 16px);
-      max-height: calc(100vh - 16px);
-      min-height: unset;
-      flex: 1;
-    }
-
-    body.layout-popout .filters {
-      max-height: none;
-    }
-
-    body.layout-popout .message-generator {
       max-height: none;
     }
 
@@ -2227,17 +2172,17 @@ body.dark #toggleMsgGen:active {
   pointer-events: none;
   white-space: nowrap;
   z-index: 9999;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.14), 0 0 0 1px rgba(0,0,0,0.07);
-}
-
-body.dark .toggle-tooltip {
-  background: rgba(20,20,30,0.92);
-  color: #fff;
-  box-shadow: none;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.13), 0 0 0 1px rgba(0,0,0,0.06);
 }
 
 #toggleMsgGen:hover .toggle-tooltip {
   opacity: 1;
+}
+
+body.dark .toggle-tooltip {
+  background: rgba(20, 20, 30, 0.92);
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.28);
 }
 
 /* Flecha del botón */
@@ -2335,7 +2280,7 @@ body.dark #grp-place.expanded > .group-header {
   animation-play-state: paused;
 }
 
-/* ===== GLOBAL TOOLTIP (igual a .toggle-tooltip) ===== */
+/* ===== GLOBAL TOOLTIP ===== */
 .ui-tooltip {
   position: fixed;
   transform: translateX(-50%) scale(0.88);
@@ -2353,19 +2298,19 @@ body.dark #grp-place.expanded > .group-header {
   z-index: 9999;
   opacity: 0;
   transition: opacity 0.18s ease, transform 0.18s cubic-bezier(0.34,1.56,0.64,1);
-  box-shadow: 0 4px 14px rgba(0,0,0,0.14), 0 0 0 1px rgba(0,0,0,0.07);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.13), 0 0 0 1px rgba(0,0,0,0.06);
   letter-spacing: 0.01em;
+}
+
+.ui-tooltip.visible {
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
 }
 
 body.dark .ui-tooltip {
   background: rgba(20, 20, 30, 0.92);
   color: #ffffff;
   box-shadow: 0 4px 14px rgba(0,0,0,0.28);
-}
-
-.ui-tooltip.visible {
-  opacity: 1;
-  transform: translateX(-50%) scale(1);
 }
 
 /* ===== SEARCH INPUT ===== */
@@ -2768,6 +2713,52 @@ body.dark .filter-group-card {
   pointer-events: none;
   border-radius: 0 0 var(--card-radius) var(--card-radius);
 }
+
+/* ===== MODO OSCURO/CLARO SIEMPRE INSTANTÁNEO ===== */
+.panel,
+.header,
+.body,
+.filters,
+.gallery-wrap,
+.gallery-item,
+.card-info,
+.filter-btn,
+.filter-group-card,
+.group,
+.group-header,
+.sort-btn,
+.sort-wrap,
+.layout-btn,
+.zoom-value,
+.mode-toggle,
+.type-toggle,
+.hotel-btn,
+.message-generator,
+.msg-gen-btn,
+.msg-gen-input,
+.msg-gen-copy-btn,
+.msg-gen-label,
+.search-input,
+#toggleMsgGen,
+#brandLogo,
+.empty-state {
+  transition-property: transform, box-shadow !important;
+  transition-duration: 0ms !important;
+}
+
+/* Excepción: hover y active sí pueden tener su transición de 220-300ms para transform/box-shadow */
+.layout-btn:hover,
+.layout-btn:active,
+.sort-btn:hover,
+.sort-btn:active,
+.filter-btn:not(.disabled):hover,
+.hotel-btn:hover,
+.mode-toggle:hover,
+.mode-toggle:active {
+  transition-property: transform, box-shadow !important;
+  transition-duration: 220ms !important;
+  transition-timing-function: cubic-bezier(0.23, 1, 0.32, 1) !important;
+}
   </style>
 </head>
 <body>
@@ -2930,15 +2921,12 @@ body.dark .filter-group-card {
       <button type="button" id="btnLayoutFull" class="layout-btn" title="Pantalla completa" aria-label="Pantalla completa" aria-pressed="false">
         <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M3 3h6v2H5v4H3V3zm12 0h6v6h-2V5h-4V3zM3 15h2v4h4v2H3v-6zm16 4h-4v2h6v-6h-2v4z"/></svg>
       </button>
-      <button type="button" id="btnLayoutPopout" class="layout-btn" title="Ventana flotante" aria-label="Ventana flotante" aria-pressed="false">
+      <button type="button" id="btnLayoutFloat" class="layout-btn" title="Ventana flotante" aria-label="Ventana flotante" aria-pressed="false">
         <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M19 19H5V5h7V3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>
       </button>
-      <button type="button" id="btnReduceMotion" class="layout-btn btn-reduce-motion" title="Reducir animaciones" aria-label="Reducir animaciones" aria-pressed="false">
-        <!-- Anillo externo siempre visible, punto central solo cuando está activo -->
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <!-- Anillo exterior (siempre visible) -->
-          <circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="2" fill="none"/>
-          <!-- Punto central (visible solo cuando .active via CSS) -->
+      <button type="button" id="btnReduceMotion" class="layout-btn btn-reduce-motion" title="Reducir efectos" aria-label="Reducir efectos" aria-pressed="false">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="12" cy="12" r="7.5" stroke="currentColor" stroke-width="2.2" fill="none"/>
           <circle cx="12" cy="12" r="4" class="rm-dot" fill="currentColor"/>
         </svg>
       </button>
@@ -3452,19 +3440,15 @@ body.dark .filter-group-card {
         });
       });
 
-      // Botón Ventana flotante — aplica/quita body.layout-popout localmente
-      const btnPopout = document.getElementById('btnLayoutPopout');
-      if (btnPopout) {
-        btnPopout.addEventListener('click', function() {
-          const isActive = document.body.classList.toggle('layout-popout');
-          btnPopout.classList.toggle('active', isActive);
-          btnPopout.setAttribute('aria-pressed', String(isActive));
-          // Si se activa popout, desactivar full
-          if (isActive) {
-            document.body.classList.remove('layout-full');
-            btnFull.classList.remove('active');
-            btnFull.setAttribute('aria-pressed', 'false');
-          }
+      // Botón Ventana flotante — abre la misma URL en una ventana flotante de 1154×776
+      const btnFloat = document.getElementById('btnLayoutFloat');
+      if (btnFloat) {
+        btnFloat.addEventListener('click', function() {
+          const url = window.location.href;
+          const popupWidth = 1154, popupHeight = 776;
+          const left = Math.round((screen.width - popupWidth) / 2);
+          const top = Math.round((screen.height - popupHeight) / 2);
+          window.open(url, '_blank', 'width=' + popupWidth + ',height=' + popupHeight + ',left=' + left + ',top=' + top + ',resizable=yes,scrollbars=yes');
         });
       }
 
@@ -3472,21 +3456,16 @@ body.dark .filter-group-card {
       applyFullState(false);
     })();
 
-    // ===== REDUCIR ANIMACIONES =====
-    const btnReduceMotion = document.getElementById('btnReduceMotion');
-    if (btnReduceMotion) {
-      btnReduceMotion.addEventListener('click', () => {
-        const active = btnReduceMotion.classList.toggle('active');
-        document.body.classList.toggle('reduce-motion', active);
-        btnReduceMotion.setAttribute('aria-pressed', String(active));
-      });
-    }
+    // ===== REDUCE MOTION BUTTON =====
+    (function initReduceMotion() {
+      const btn = document.getElementById('btnReduceMotion');
+      if (!btn) return;
 
-    // Auto-detectar ventana pequeña (Apps Script dialog ≤1160×790) y aplicar layout-popout
-    (function autoDetectPopout() {
-      if (window.innerWidth <= 1160 && window.innerHeight <= 790) {
-        document.body.classList.add('layout-popout');
-      }
+      btn.addEventListener('click', function () {
+        const active = document.body.classList.toggle('reduce-motion');
+        btn.classList.toggle('active', active);
+        btn.setAttribute('aria-pressed', String(active));
+      });
     })();
 
     // ===== ZOOM INTERNO =====
